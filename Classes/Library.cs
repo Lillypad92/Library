@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Xml.Serialization;
 
 namespace Uppgift2.Classes
 {
@@ -8,13 +9,29 @@ namespace Uppgift2.Classes
         public const string ListOfBorrowers = "D:/Programmering/Inlämningsuppgift-2/Uppgift2/Files/listofborrowers.json";
 
         public List<Book> Books { get; set; }
+        public List<Borrower> Borrower { get; set; }
         
 
         public Library()
         {
             Books = GetBooks();
+            Borrower = GetBorrowers();
         }
         
+        public List<Borrower> GetBorrowers() 
+        {
+            try 
+            {
+                if (!File.Exists(ListOfBorrowers)) { return new List<Borrower>(); }
+                string jsonData = File.ReadAllText(ListOfBorrowers);
+
+                return JsonSerializer.Deserialize<List<Borrower>>(jsonData);
+            } 
+            catch (Exception ex) 
+            { 
+                return new List<Borrower>();
+            }
+        }
         public List<Book> GetBooks()
         {
             try
@@ -29,6 +46,52 @@ namespace Uppgift2.Classes
                 return new List<Book>();
             }
         }
+
+        public void AddNewBorrowers(string name, string lastname, double socialsecuritynumber, int id) 
+        {
+            try 
+            {
+                Borrower[] addedBorrowers;
+
+                if (File.Exists(ListOfBorrowers))
+                {
+                    string jsonData = File.ReadAllText(ListOfBorrowers);
+                    addedBorrowers = JsonSerializer.Deserialize<Borrower[]>(jsonData);
+                }
+                else 
+                { 
+                    addedBorrowers= new Borrower[0];
+                }
+
+                var newBorrowers = new Borrower(name, lastname, socialsecuritynumber, id);
+
+                var combinedBorrowers = new Borrower[addedBorrowers.Length + 1];
+                Array.Copy(addedBorrowers, combinedBorrowers, addedBorrowers.Length);
+                combinedBorrowers[addedBorrowers.Length] = newBorrowers;
+
+                string newJsonData = JsonSerializer.Serialize(combinedBorrowers);
+
+                File.WriteAllText(ListOfBorrowers, newJsonData);
+                Borrower.Add(newBorrowers);
+
+                Console.WriteLine("Det finns en ny registrerad låntagare i biblioteket.");
+                
+                foreach (Borrower borrower in addedBorrowers) 
+                {
+                    Console.WriteLine($"Namn: {borrower.Name}\n" +
+                        $"Efternamn: {borrower.LastName}\n" +
+                        $"Personnummer: {borrower.SocialSecurityNumber}\n" +
+                        $"Biblioteks ID: {borrower.ID}");
+                }
+
+            } 
+            catch (Exception e)
+            { 
+            
+            }
+        }
+        
+        
         public void AddNewBook(string title, string author, string language)
         {
             try
@@ -63,6 +126,7 @@ namespace Uppgift2.Classes
         }
         public void ShowAvaibleBooks() 
         {
+            Console.WriteLine();
             Console.WriteLine("----------Dessa böcker finns tillgängliga----------");
             foreach (Book book in Books) 
             {
@@ -74,31 +138,53 @@ namespace Uppgift2.Classes
                 Console.WriteLine();
             }
             Console.WriteLine("--------------------------------------------------");
-            Console.WriteLine("Tryck enter för att komma vidare.");
-            
+            Console.WriteLine("Tryck Enter för att komma vidare.");
+
+            //Gör så att man kan komma vidare i programmet vid Enter knapptryckning, fungerar inte med någon annan knapptryckning.
+            while (true) 
+            { 
+                ConsoleKey key = Console.ReadKey(true).Key;
+                if (key.Equals(ConsoleKey.Enter)) 
+                {
+                    break;
+                }
+            }
+            Console.Clear();
         }
 
-        //public void LendingBooks (string title)
-        //{
-        //    Console.WriteLine("---Dessa böcker finns tillgängliga för utlåning----");
-        //    foreach (Book book in Books) 
-        //    {
-        //        Console.WriteLine($"Titel: {book.Title}\n" +
-        //            $"Författare: {book.Author}\n");
-        //    }
-            
-        //    Console.WriteLine("Vilken bok ska lånas ut?\nDet räcker om du skriver titeln på boken som ska lånas ut.");
-        //    title = Console.ReadLine();
-
-            
-
-
-        //    Console.ReadKey();
-        //}
-
         public void ShowBorrowers() 
-        { 
+        {
+            Console.WriteLine("------Låntagare----------");
+            foreach (Borrower borrowers in Borrower) 
+            {
+
+                Console.WriteLine($"Förnamn: {borrowers.Name}\n" +
+                    $"Efternamn: {borrowers.LastName}\n" +
+                    $"Lånade böcker: {borrowers.LoanedBooks}\n" +
+                    $"Personnumer: {borrowers.SocialSecurityNumber}");
+                Console.WriteLine();
+            }
+            Console.WriteLine("--------------------------------------------------");
+            Console.WriteLine("Tryck Enter för att komma vidare.");
+
+            //Gör så att man kan komma vidare i programmet vid Enter knapptryckning, fungerar inte med någon annan knapptryckning. 
+            while (true)
+            {
+                ConsoleKey key = Console.ReadKey(true).Key;
+                if (key.Equals(ConsoleKey.Enter))
+                {
+                    break;
+                }
+            }
+            Console.Clear();
+        }
+        public void LendingBooks() 
+        {
             
+        }
+        public void ReturBooks() 
+        { 
+               
         }
 
     }
