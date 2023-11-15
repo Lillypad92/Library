@@ -1,13 +1,13 @@
 ﻿using System.Text.Json;
-using System.Xml.Serialization;
 
 namespace Uppgift2.Classes
 {
     public class Library
     {
-        public const string ListOfBooks = "D:/Programmering/Inlämningsuppgift-2/Uppgift2/Files/listofbooks.json";
-        public const string ListOfBorrowers = "D:/Programmering/Inlämningsuppgift-2/Uppgift2/Files/listofborrowers.json";
-
+        public const string ListOfBooks = "C:/Users/linda/source/repos/Uppgift2/Files2/listofbooks.json";
+        public const string ListOfBorrowers = "C:/Users/linda/source/repos/Uppgift2/Files2/listofborrowers.json";
+        //D:/Programmering/Inlämningsuppgift-2/Uppgift2/Files2/listofbooks.json"
+            //D:/Programmering/Inlämningsuppgift-2/Uppgift2/Files2/listofborrowers.json"
         public List<Book> Books { get; set; }
         public List<Borrower> Borrower { get; set; }
         
@@ -60,7 +60,7 @@ namespace Uppgift2.Classes
                 }
                 else 
                 { 
-                    addedBorrowers= new Borrower[0];
+                    addedBorrowers = new Borrower[0];
                 }
 
                 var newBorrowers = new Borrower(name, lastname, socialsecuritynumber, id);
@@ -75,14 +75,14 @@ namespace Uppgift2.Classes
                 Borrower.Add(newBorrowers);
 
                 Console.WriteLine("Det finns en ny registrerad låntagare i biblioteket.");
-                
-                foreach (Borrower borrower in addedBorrowers) 
-                {
-                    Console.WriteLine($"Namn: {borrower.Name}\n" +
-                        $"Efternamn: {borrower.LastName}\n" +
-                        $"Personnummer: {borrower.SocialSecurityNumber}\n" +
-                        $"Biblioteks ID: {borrower.ID}");
-                }
+
+                //foreach (Borrower borrower in addedBorrowers)
+                //{
+                //    Console.WriteLine($"Namn: {borrower.Name}\n" +
+                //        $"Efternamn: {borrower.LastName}\n" +
+                //        $"Personnummer: {borrower.SocialSecurityNumber}\n" +
+                //        $"Biblioteks ID: {borrower.ID}");
+                //}
 
             } 
             catch (Exception e)
@@ -126,18 +126,30 @@ namespace Uppgift2.Classes
         }
         public void ShowAvaibleBooks() 
         {
-            Console.WriteLine();
-            Console.WriteLine("----------Dessa böcker finns tillgängliga----------");
-            foreach (Book book in Books) 
+            if (Books.Count == 0)
             {
-                string isBorrowed = book.IsBorrowed ? "Ja" : "Nej";
-
-                Console.WriteLine($"Titel: {book.Title}\n" +
-                    $"Författare: {book.Author}\n" +
-                    $"Utlånad: {isBorrowed}");
-                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("--------------------------------------------------");
+                Console.WriteLine("Det finns inga böcker att visa.\nLägg till nya böcker i biblioteket för att se böcker i listan.");
+                Console.WriteLine("--------------------------------------------------");
+                Console.ForegroundColor = ConsoleColor.White;
             }
-            Console.WriteLine("--------------------------------------------------");
+            else 
+            {
+                Console.WriteLine("----------Dessa böcker finns tillgängliga----------");
+                foreach (Book book in Books)
+                {
+
+                    string isBorrowed = book.IsBorrowed ? "Ja" : "Nej";
+
+                    Console.WriteLine($"Titel: {book.Title}\n" +
+                        $"Författare: {book.Author}\n" +
+                        $"Utlånad: {isBorrowed}");
+                    Console.WriteLine();
+                }
+            }
+
+            Console.WriteLine();
             Console.WriteLine("Tryck Enter för att komma vidare.");
 
             //Gör så att man kan komma vidare i programmet vid Enter knapptryckning, fungerar inte med någon annan knapptryckning.
@@ -154,29 +166,41 @@ namespace Uppgift2.Classes
 
         public void ShowBorrowers() 
         {
-            Console.WriteLine("------Låntagare----------");
-            foreach (Borrower borrowers in Borrower) 
+            if (Borrower.Count == 0)
             {
-
-                Console.WriteLine($"Förnamn: {borrowers.Name}\n" +
-                    $"Efternamn: {borrowers.LastName}\n" +
-                    $"Lånade böcker: {borrowers.LoanedBooks}\n" +
-                    $"Personnumer: {borrowers.SocialSecurityNumber}");
-                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("--------------------------------------------------");
+                Console.WriteLine("Det finns inga registrerade låntagare.\nVar vänlig och registrera nya låntagare.");
+                Console.WriteLine("--------------------------------------------------");
+                Console.ForegroundColor = ConsoleColor.White;
             }
-            Console.WriteLine("--------------------------------------------------");
-            Console.WriteLine("Tryck Enter för att komma vidare.");
-
-            //Gör så att man kan komma vidare i programmet vid Enter knapptryckning, fungerar inte med någon annan knapptryckning. 
-            while (true)
+            else 
             {
-                ConsoleKey key = Console.ReadKey(true).Key;
-                if (key.Equals(ConsoleKey.Enter))
+                Console.WriteLine("------Låntagare----------");
+                foreach (Borrower borrowers in Borrower)
                 {
-                    break;
+
+                    Console.WriteLine($"Förnamn: {borrowers.Name}\n" +
+                        $"Efternamn: {borrowers.LastName}\n" +
+                        $"Lånade böcker: {borrowers.LoanedBooks}\n" +
+                        $"Personnumer: {borrowers.SocialSecurityNumber}");
+                    Console.WriteLine();
                 }
+                Console.WriteLine("--------------------------------------------------");
+                Console.WriteLine("Tryck Enter för att komma vidare.");
+
+                //Gör så att man kan komma vidare i programmet vid Enter knapptryckning, fungerar inte med någon annan knapptryckning. 
+                while (true)
+                {
+                    ConsoleKey key = Console.ReadKey(true).Key;
+                    if (key.Equals(ConsoleKey.Enter))
+                    {
+                        break;
+                    }
+                }
+                Console.Clear();
             }
-            Console.Clear();
+         
         }
         public void LendingBooks() 
         {

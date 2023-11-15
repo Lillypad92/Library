@@ -2,7 +2,6 @@
 {
     public class Menu
     {
-        
         public void RunMenu() 
         {
             Library library = new Library();
@@ -74,7 +73,7 @@
                         Console.Write("Förnamn: ");
                         string? name = Console.ReadLine();
 
-                        Console.Write("Efternamn:");
+                        Console.Write("Efternamn: ");
                         string ? lastname = Console.ReadLine();
 
                         Console.Write("Personnummer: ");
