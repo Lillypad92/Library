@@ -1,16 +1,19 @@
 ﻿using System.Text.Json;
 
+
 namespace Uppgift2.Classes
 {
     public class Library
     {
-        public const string ListOfBooks = "C:/Users/linda/source/repos/Uppgift2/Files2/listofbooks.json";
-        public const string ListOfBorrowers = "C:/Users/linda/source/repos/Uppgift2/Files2/listofborrowers.json";
+
+        public const string ListOfBooks = "C:/Users/linda/source/repos/Biblioteket/Files2/listofbooks.json";
+        public const string ListOfBorrowers = "C:/Users/linda/source/repos/Biblioteket/Files2/listofborrowers.json";
+        
         //D:/Programmering/Inlämningsuppgift-2/Uppgift2/Files2/listofbooks.json"
-            //D:/Programmering/Inlämningsuppgift-2/Uppgift2/Files2/listofborrowers.json"
+        //D:/Programmering/Inlämningsuppgift-2/Uppgift2/Files2/listofborrowers.json"
+
         public List<Book> Books { get; set; }
         public List<Borrower> Borrower { get; set; }
-        
 
         public Library()
         {
@@ -75,23 +78,12 @@ namespace Uppgift2.Classes
                 Borrower.Add(newBorrowers);
 
                 Console.WriteLine("Det finns en ny registrerad låntagare i biblioteket.");
-
-                //foreach (Borrower borrower in addedBorrowers)
-                //{
-                //    Console.WriteLine($"Namn: {borrower.Name}\n" +
-                //        $"Efternamn: {borrower.LastName}\n" +
-                //        $"Personnummer: {borrower.SocialSecurityNumber}\n" +
-                //        $"Biblioteks ID: {borrower.ID}");
-                //}
-
             } 
             catch (Exception e)
             { 
             
             }
         }
-        
-        
         public void AddNewBook(string title, string author, string language)
         {
             try
@@ -118,6 +110,9 @@ namespace Uppgift2.Classes
 
                 File.WriteAllText(ListOfBooks, newJsonData);
                 Books.Add(newBook);
+
+                Console.WriteLine("Boken har registrerats!");
+                
             }
             catch (Exception ex)
             {
@@ -136,15 +131,15 @@ namespace Uppgift2.Classes
             }
             else 
             {
-                Console.WriteLine("----------Dessa böcker finns tillgängliga----------");
+                Console.WriteLine("Dessa böcker finns tillgängliga: ");
                 foreach (Book book in Books)
                 {
 
-                    string isBorrowed = book.IsBorrowed ? "Ja" : "Nej";
-
+                    string IsAvailable = book.IsAvailable ? "Ja" : "Nej";
+                    Console.WriteLine("-----------------------------------------------");
                     Console.WriteLine($"Titel: {book.Title}\n" +
                         $"Författare: {book.Author}\n" +
-                        $"Utlånad: {isBorrowed}");
+                        $"Utlånad: {IsAvailable}");
                     Console.WriteLine();
                 }
             }
@@ -173,6 +168,17 @@ namespace Uppgift2.Classes
                 Console.WriteLine("Det finns inga registrerade låntagare.\nVar vänlig och registrera nya låntagare.");
                 Console.WriteLine("--------------------------------------------------");
                 Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("Tryck Enter för att komma vidare.");
+                
+                while (true)
+                {
+                    ConsoleKey key = Console.ReadKey(true).Key;
+                    if (key.Equals(ConsoleKey.Enter))
+                    {
+                        break;
+                    }
+                }
+                Console.Clear();
             }
             else 
             {
@@ -204,6 +210,19 @@ namespace Uppgift2.Classes
         }
         public void LendingBooks() 
         {
+            
+            Borrower borrower = Borrower.FirstOrDefault(b => b.ID == borrowerID);
+
+            Book book = Books.FirstOrDefault(b => b.Title == b.Title);
+
+            //if (Borrower != null && Books != null && Books.IsAvailable)
+            //{
+            //    Borrower.Add()
+      
+            //    Borrower.Borrower.Add(Books);
+            //    Book.IsAvailable = false;
+            //}
+            
             
         }
         public void ReturBooks() 

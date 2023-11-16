@@ -26,8 +26,6 @@
                 Console.Write("Menyval: ");
                 int menuChoice = int.Parse(Console.ReadLine());
 
-                
-
                 switch (menuChoice)
                 {
                     case 1:
@@ -46,11 +44,17 @@
                         if (author == null) author = "";
                         if (language == null) language = "";
                         
-
                         library.AddNewBook(title, author, language);
                         break;
                     case 2:
                         //Låna ut böcker.
+                        Console.WriteLine("Ange titel på boken som ska lånas ut.\nSamt ange ett biblioteks ID på personen som ska låna boken.");
+                        Console.Write("Bokens titel: ");
+                        title = Console.ReadLine();
+
+                        Console.Write("Låntagarens ID: ");
+                        int id = int.Parse(Console.ReadLine());
+
                         library.LendingBooks();
                         break;
                     case 3:
@@ -80,14 +84,14 @@
                         double? socialsecuritynumber = double.Parse(Console.ReadLine());
 
                         Console.Write("Biblioteks ID: ");
-                        int? id = int.Parse(Console.ReadLine());
+                        id = int.Parse(Console.ReadLine());
 
                         if (name == null) name = "";
                         if (lastname == null) lastname = "";
                         if (id == null) id = 0;
                         if (socialsecuritynumber == null) socialsecuritynumber = 0;
 
-                        library.AddNewBorrowers(name, lastname, (double)socialsecuritynumber, (int)id);
+                        library.AddNewBorrowers(name, lastname, (double)socialsecuritynumber, id);
                         break;
                     case 7:
                         //Avslutar programmet.
@@ -101,8 +105,8 @@
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("---------------------------------------");
                         Console.WriteLine("Du valde ett ogiltigt val, försök igen.");
-                        Console.WriteLine("Tryck enter för att komma vidare.");
                         Console.WriteLine("---------------------------------------");
+                        Console.WriteLine("Tryck enter för att komma vidare.");
                         Console.ReadKey();
                         Console.Clear();
                         Console.ForegroundColor = ConsoleColor.White;
