@@ -1,1 +1,18 @@
-[{"Name":"Linda Forslund","LastName":"Forslund","LoanedBooks":false,"SocialSecurityNumber":9203164604,"ID":1}]
+[
+  {
+    "Id": 1,
+    "FirstName": "sten",
+    "LastName": "Stenson",
+    "LoanedBooks": [
+      {
+        "Id": 1,
+        "Title": "Bok 1",
+        "Author": "sfs",
+        "Language": "fkkjsfnsf",
+        "IsAvailable": false,
+        "CategoryId": 1
+      }
+    ],
+    "SocialSecurityNumber": 234234
+  }
+]

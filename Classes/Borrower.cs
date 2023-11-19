@@ -2,18 +2,21 @@
 {
     public class Borrower
     {
-        public string Name { get; set; }
+        public int Id { get; set; }
+        public string FirstName { get; set; }
         public string LastName { get; set; }
-        public bool LoanedBooks { get; set; }
+        public List<Book> LoanedBooks { get; set; }
         public double SocialSecurityNumber { get; set; }
-        public int ID { get; set; }
-
-        public Borrower(string name, string lastname, double socialsecuritynumber, int id)
+        
+        public Borrower(string firstName, string lastName, double socialSecuritynumber)
         {
-            Name = name;
-            LastName = lastname;
-            SocialSecurityNumber = socialsecuritynumber;
-            ID = id;
+            FirstName = firstName;
+            LastName = lastName;
+            SocialSecurityNumber = socialSecuritynumber;         
+            
+
+            LoanedBooks = new List<Book>();
         }
     }
+  
 }

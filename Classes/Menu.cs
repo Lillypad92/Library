@@ -5,7 +5,7 @@
         public void RunMenu() 
         {
             Library library = new Library();
-
+                   
             bool endProgram = false;
             
             Console.WriteLine("Välkommen till Åshammars bibliotek!");
@@ -13,7 +13,6 @@
 
             while (!endProgram) 
             {
-                
                 Console.WriteLine("Vad vill du göra? ");
                 Console.WriteLine();
                 Console.WriteLine("1. Lägg till nya böcker i biblioteket.");
@@ -32,34 +31,65 @@
                         //Lägg till nya böcker.
                         Console.WriteLine();
                         Console.Write("Titel på boken: ");
-                        string? title = Console.ReadLine();
+                        string title = Console.ReadLine();
 
                         Console.Write("Bokens författare: ");
-                        string? author = Console.ReadLine();
+                        string author = Console.ReadLine();
 
-                        Console.Write("Bokens språk : ");
-                        string? language = Console.ReadLine();
+                        Console.Write("Bokens språk: ");
+                        string language = Console.ReadLine();
 
+                        Console.WriteLine("Välj en kategori");
+                        Console.WriteLine("1. Djur");
+                        Console.WriteLine("2. Historia");
+                        Console.WriteLine("3. Thriller");
+                        Console.Write("Kategori: ");
+                        int categoryChoice = int.Parse(Console.ReadLine());
+
+                        //TODO: CONTROL CORRECT NUMBER
+                        
                         if (title == null) title = "";
                         if (author == null) author = "";
                         if (language == null) language = "";
-                        
-                        library.AddNewBook(title, author, language);
+
+                        Book newBook = new Book(title, author, language, true, categoryChoice);
+                        newBook.Id = library.Books.Count == 0 ? 1 : library.Books.Count + 1;
+
+                        library.Books.Add(newBook);
+                        library.AddBookToJsonFile(library.Books);
                         break;
                     case 2:
                         //Låna ut böcker.
-                        Console.WriteLine("Ange titel på boken som ska lånas ut.\nSamt ange ett biblioteks ID på personen som ska låna boken.");
-                        Console.Write("Bokens titel: ");
-                        title = Console.ReadLine();
+                        library.ShowAvaibleBooks();
 
-                        Console.Write("Låntagarens ID: ");
-                        int id = int.Parse(Console.ReadLine());
+                        Console.WriteLine();
+                        Console.Write("Ange ID på boken som ska lånas ut: ");
+                        int bookId = int.Parse(Console.ReadLine());
 
-                        library.LendingBooks();
+                        Console.WriteLine("Dessa låntagare finns: ");
+                        foreach (Borrower borrower in library.Borrowers)
+                        {
+                            Console.WriteLine($"{borrower.FirstName} {borrower.LastName} med ID: {borrower.Id}");
+                        }
+
+                        Console.Write("Låntagarens id: ");
+
+                        int borrowerId = int.Parse(Console.ReadLine());
+
+                        library.BorrowBook(bookId, borrowerId);
                         break;
                     case 3:
                         //Återlämna böcker.
-                        library.ReturBooks();
+
+                        library.ShowBorrowers();
+
+                        Console.Write("Ange låntagarens ID som ska återlämna bok/böcker: ");
+                        borrowerId = int.Parse(Console.ReadLine());
+
+                        Console.Write("Ange bokens ID: ");
+                        bookId = int.Parse(Console.ReadLine());
+
+                        library.ReturnBooks(borrowerId, bookId);
                         break;
                     case 4:
                         //Visa tillgängliga böcker.
@@ -75,23 +105,23 @@
                         //Lägg till nya låntagare
                         Console.WriteLine();
                         Console.Write("Förnamn: ");
-                        string? name = Console.ReadLine();
+                        string newBorrowerName = Console.ReadLine();
 
                         Console.Write("Efternamn: ");
-                        string ? lastname = Console.ReadLine();
+                        string? lastname = Console.ReadLine();
 
                         Console.Write("Personnummer: ");
-                        double? socialsecuritynumber = double.Parse(Console.ReadLine());
+                        double socialsecuritynumber = double.Parse(Console.ReadLine());
 
-                        Console.Write("Biblioteks ID: ");
-                        id = int.Parse(Console.ReadLine());
-
-                        if (name == null) name = "";
+                        if (newBorrowerName == null) newBorrowerName = "";
                         if (lastname == null) lastname = "";
-                        if (id == null) id = 0;
                         if (socialsecuritynumber == null) socialsecuritynumber = 0;
 
-                        library.AddNewBorrowers(name, lastname, (double)socialsecuritynumber, id);
+                        Borrower newBorrower = new Borrower(newBorrowerName, lastname, socialsecuritynumber);
+                        newBorrower.Id = library.Borrowers.Count == 0 ? 1 : library.Borrowers.Count + 1;
+
+                        library.Borrowers.Add(newBorrower);
+                        library.AddBorrowerToJsonFile(library.Borrowers);
                         break;
                     case 7:
                         //Avslutar programmet.
