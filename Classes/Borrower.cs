@@ -1,4 +1,5 @@
-﻿namespace Uppgift2.Classes
+﻿
+namespace Uppgift2.Classes
 {
     public class Borrower
     {
@@ -17,6 +18,7 @@
 
             LoanedBooks = new List<Book>();
         }
+
     }
   
 }

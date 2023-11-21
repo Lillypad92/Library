@@ -13,6 +13,8 @@
 
             while (!endProgram) 
             {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine();
                 Console.WriteLine("Vad vill du göra? ");
                 Console.WriteLine();
                 Console.WriteLine("1. Lägg till nya böcker i biblioteket.");
@@ -24,12 +26,15 @@
                 Console.WriteLine("7. Avsluta programmet.");
                 Console.Write("Menyval: ");
                 int menuChoice = int.Parse(Console.ReadLine());
+                Console.ForegroundColor = ConsoleColor.White;
 
                 switch (menuChoice)
                 {
                     case 1:
                         //Lägg till nya böcker.
                         Console.WriteLine();
+                        Console.WriteLine("Lägg till ny bok i biblioteket:");
+                        Console.WriteLine("-----------------------------------");
                         Console.Write("Titel på boken: ");
                         string title = Console.ReadLine();
 
@@ -38,7 +43,7 @@
 
                         Console.Write("Bokens språk: ");
                         string language = Console.ReadLine();
-
+                        Console.WriteLine("-----------------");
                         Console.WriteLine("Välj en kategori");
                         Console.WriteLine("1. Djur");
                         Console.WriteLine("2. Historia");
@@ -46,8 +51,6 @@
                         Console.Write("Kategori: ");
                         int categoryChoice = int.Parse(Console.ReadLine());
 
-                        //TODO: CONTROL CORRECT NUMBER
-                        
                         if (title == null) title = "";
                         if (author == null) author = "";
                         if (language == null) language = "";
@@ -56,40 +59,51 @@
                         newBook.Id = library.Books.Count == 0 ? 1 : library.Books.Count + 1;
 
                         library.Books.Add(newBook);
-                        library.AddBookToJsonFile(library.Books);
+                        library.AddBookToJsonFile(library.Books, categoryChoice);
                         break;
                     case 2:
                         //Låna ut böcker.
                         library.ShowAvaibleBooks();
 
                         Console.WriteLine();
-                        Console.Write("Ange ID på boken som ska lånas ut: ");
+                        Console.Write("Ange bokens id som ska lånas ut: ");
                         int bookId = int.Parse(Console.ReadLine());
-
+                        Console.WriteLine();
                         Console.WriteLine("Dessa låntagare finns: ");
+                        Console.WriteLine("------------------------");
                         foreach (Borrower borrower in library.Borrowers)
                         {
-                            Console.WriteLine($"{borrower.FirstName} {borrower.LastName} med ID: {borrower.Id}");
+                            Console.WriteLine($"Förnamn: {borrower.FirstName}\n"+    
+                                $"Efternamn: {borrower.LastName}\n" +
+                                $"Personnummer: {borrower.SocialSecurityNumber}\n" +
+                                $"Biblioteks id: {borrower.Id}");
+                            Console.WriteLine("-------------------------");
                         }
 
-                        Console.Write("Låntagarens id: ");
-
+                        Console.Write("Ange låntagarens biblioteks id: ");
                         int borrowerId = int.Parse(Console.ReadLine());
 
                         library.BorrowBook(bookId, borrowerId);
                         break;
                     case 3:
                         //Återlämna böcker.
+                        //library.ShowAvaibleBooks();
+                        //library.ShowBorrowers();
 
-                        library.ShowBorrowers();
+                        if (library.ReturnBooks == null && library.ShowBorrowers == null)
+                        {
+                            Console.WriteLine("Det finns inga registrerade böcker i biblioteket.");
+                        }
+                        else 
+                        {
+                            Console.Write("Ange låntagarens biblioteks id som ska återlämna boken: ");
+                            borrowerId = int.Parse(Console.ReadLine());
 
-                        Console.Write("Ange låntagarens ID som ska återlämna bok/böcker: ");
-                        borrowerId = int.Parse(Console.ReadLine());
+                            Console.Write("Ange bokens id: ");
+                            bookId = int.Parse(Console.ReadLine());
+                            library.ReturnBooks(borrowerId, bookId);
+                        }
 
-                        Console.Write("Ange bokens ID: ");
-                        bookId = int.Parse(Console.ReadLine());
-
-                        library.ReturnBooks(borrowerId, bookId);
                         break;
                     case 4:
                         //Visa tillgängliga böcker.
@@ -108,7 +122,7 @@
                         string newBorrowerName = Console.ReadLine();
 
                         Console.Write("Efternamn: ");
-                        string? lastname = Console.ReadLine();
+                        string lastname = Console.ReadLine();
 
                         Console.Write("Personnummer: ");
                         double socialsecuritynumber = double.Parse(Console.ReadLine());
@@ -121,7 +135,7 @@
                         newBorrower.Id = library.Borrowers.Count == 0 ? 1 : library.Borrowers.Count + 1;
 
                         library.Borrowers.Add(newBorrower);
-                        library.AddBorrowerToJsonFile(library.Borrowers);
+                        library.AddBorrowerToJsonFile(library.Borrowers, socialsecuritynumber);
                         break;
                     case 7:
                         //Avslutar programmet.
@@ -136,10 +150,10 @@
                         Console.WriteLine("---------------------------------------");
                         Console.WriteLine("Du valde ett ogiltigt val, försök igen.");
                         Console.WriteLine("---------------------------------------");
+                        Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine("Tryck enter för att komma vidare.");
                         Console.ReadKey();
                         Console.Clear();
-                        Console.ForegroundColor = ConsoleColor.White;
                         break;
                 }
             }
